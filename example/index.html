@@ -1,0 +1,27 @@
+<html>
+  <head>
+    <title>indiegamr.com collision detection</title>
+    <style type="text/css">
+      html,body {
+        padding: 0px;
+        border: 0px;
+        margin: 0px;
+        background-color: #000;
+      }
+
+      canvas {
+        background-color: #130080;
+        margin: 0px;
+      }
+    </style>
+    <script src="js/stats.js"></script>
+    <script src="js/easeljs-0.5.0.min.js"></script>
+    <script src="js/assetfactory.js"></script>
+    <script src="js/collision_detection.js"></script>
+    <script src="js/app.js"></script>
+  </head>
+  <body>
+    <input type="button" value="Toggle Rect/Pixel Collison" style="position: absolute; top: 3px; left: 85px;" onclick="toggleCollisionMethod();">
+    <input id="alphaThres" type="text" min="0" max="1" step="0.05" value="0.75" style="position: absolute; top: 3px; left: 260px; width: 40px;" onkeyup="onRangeChange();">
+  </body>
+</html>
