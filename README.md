@@ -1,23 +1,20 @@
 Pixel Perfect and BoundingBox Collision Detector for EaselJS Bitmaps and BitmapAnimations
 
-How to Use
-==========
+## Namespace
 
 The default namespace is 'ndgmr':
 To check for a collision between to Bitmaps and/or BitmapAnimations
 
-Rectangular / BoundingBox Collision
------------------------------------
-var intersection = ndgmr.checkRectCollision(bitmap1,bitmap2);
-// intersection is null if no collision, otherwise a {x,y,width,height}-Object is returned
+## Example: Rectangular / BoundingBox Collision
+	var intersection = ndgmr.checkRectCollision(bitmap1,bitmap2);
+	// intersection is null if no collision, otherwise a {x,y,width,height}-Object is returned
 
-Pixel Perfect Collision
------------------------
+## Pixel Perfect Collision Example
+	var collision = ndgmr.checkPixelCollision(bitmap1,bitmap2,alphaThreshold);
+	// true or false
+
 alphaThreshold default is 0, set to higher value to ignore collisions with semi transparent
 pixels
-
-var collision = ndgmr.checkPixelCollision(bitmap1,bitmap2,alphaThreshold);
-// true or false
 
 http://www.indiegamr.com
 
