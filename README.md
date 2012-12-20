@@ -12,9 +12,7 @@ To check for a collision between to Bitmaps and/or BitmapAnimations
 ## Pixel Perfect Collision Example
 	var collision = ndgmr.checkPixelCollision(bitmap1,bitmap2,alphaThreshold);
 	// true or false
-
-alphaThreshold default is 0, set to higher value to ignore collisions with semi transparent
-pixels
+	// alphaThreshold default is 0, set to higher value to ignore collisions with semi transparent pixels
 
 http://www.indiegamr.com
 
