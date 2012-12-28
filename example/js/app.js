@@ -15,7 +15,7 @@ window.alphaThresh = 0.75;
 function onRangeChange() {
    var range = document.getElementById('alphaThres');
    window.alphaThresh = parseFloat(range.value);
-   console.log(window.alphaThresh);
+   //console.log(window.alphaThresh);
 }
 function init() {
   // creating the canvas-element 
@@ -85,7 +85,7 @@ function tick(e) {
       
       var intersection = collisionMethod(shelter,star,window.alphaThresh);
       if ( intersection ) {
-         console.log(intersection.x,intersection.y,intersection.width,intersection.height);
+         //console.log(intersection.x,intersection.y,intersection.width,intersection.height);
          star.y = -15 - Math.random()*15;
          star.x = Math.random()*canvas.width;
       }
