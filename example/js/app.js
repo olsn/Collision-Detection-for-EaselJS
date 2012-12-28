@@ -83,7 +83,9 @@ function tick(e) {
       star.y += star.velY;
       star.rotation += star.rotVel;
       
-      if ( collisionMethod(shelter,star,window.alphaThresh) ) {
+      var intersection = collisionMethod(shelter,star,window.alphaThresh);
+      if ( intersection ) {
+         console.log(intersection.x,intersection.y,intersection.width,intersection.height);
          star.y = -15 - Math.random()*15;
          star.x = Math.random()*canvas.width;
       }

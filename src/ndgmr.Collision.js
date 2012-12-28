@@ -50,14 +50,16 @@ this.ndgmr = this.ndgmr || {};
   }
   ndgmr.checkRectCollision = checkRectCollision;
 
-  var checkPixelCollision = function(bitmap1, bitmap2, alphaThreshold) {
+  var checkPixelCollision = function(bitmap1, bitmap2, alphaThreshold, getRect) {
     //display the intersecting canvases for debugging
     //document.body.appendChild(collisionCanvas);
     //document.body.appendChild(collisionCanvas2);
+    getRect = getRect || false;
 
     var areObjectsCloseEnough,
         intersetion,
-        imageData1, imageData2;
+        imageData1, imageData2,
+        pixelIntersection;
 
     areObjectsCloseEnough = _collisionDistancePrecheck(bitmap1,bitmap2);
     if ( !areObjectsCloseEnough ) {
@@ -84,7 +86,16 @@ this.ndgmr = this.ndgmr || {};
 
     //compare the alpha values to the threshold and return the result
     // = true if pixels are both > alphaThreshold at one coordinate
-    return _compareAlphaValues(imageData1,imageData2,intersetion.width,intersetion.height,alphaThreshold);
+    pixelIntersection = _compareAlphaValues(imageData1,imageData2,intersetion.width,intersetion.height,alphaThreshold, getRect);
+    
+    if ( pixelIntersection ) {
+      pixelIntersection.x  += intersetion.x;
+      pixelIntersection.x2 += intersetion.x;
+      pixelIntersection.y  += intersetion.y;
+      pixelIntersection.y2 += intersetion.y;
+    }
+
+    return pixelIntersection;
   }
   ndgmr.checkPixelCollision = checkPixelCollision;
 
@@ -127,8 +138,9 @@ this.ndgmr = this.ndgmr || {};
     return ctx.getImageData(0, 0, intersetion.width, intersetion.height).data;
   }
 
-  var _compareAlphaValues = function(imageData1,imageData2,width,height,alphaThreshold) {
-    var alpha1, alpha2, x, y, offset = 3;
+  var _compareAlphaValues = function(imageData1,imageData2,width,height,alphaThreshold,getRect) {
+    var alpha1, alpha2, x, y, offset = 3,
+        pixelRect = {x:Infinity,y:Infinity,x2:-Infinity,y2:-Infinity};
 
     // parsing through the pixels checking for an alpha match
     // TODO: intelligent parsing, not just from 0 to end!
@@ -138,13 +150,26 @@ this.ndgmr = this.ndgmr || {};
             alpha2 = imageData2.length > offset+1 ? imageData2[offset] / 255 : 0;
             
             if ( alpha1 > alphaThreshold && alpha2 > alphaThreshold ) {
-              return true;
+              if ( getRect ) {
+                if ( x < pixelRect.x  ) pixelRect.x  = x;
+                if ( x > pixelRect.x2 ) pixelRect.x2 = x;
+                if ( y < pixelRect.y  ) pixelRect.y  = y;
+                if ( y > pixelRect.y2 ) pixelRect.y2 = y;
+              } else {
+                return {x:x,y:y,width:1,height:1};
+              }
             }
             offset += 4;
         }
     }
 
-    return false;
+    if ( pixelRect.x != Infinity ) {
+      pixelRect.width  = pixelRect.x2 - pixelRect.x + 1;
+      pixelRect.height = pixelRect.y2 - pixelRect.y + 1;
+      return pixelRect;
+    }
+
+    return null;
   }
 
   var calculateIntersection = function(rect1, rect2)
