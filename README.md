@@ -13,10 +13,10 @@ To check for a collision between to Bitmaps and/or BitmapAnimations
 	var collision = ndgmr.checkPixelCollision(bitmap1,bitmap2,alphaThreshold,true);
 	// returns a rect with the global position of the colliding pixel(s)
 	// alphaThreshold default is 0, set to higher value to ignore collisions with semi transparent pixels
-  // the last parameter defines if all pixels should be checked, in this case it returns a
-  // rect with the size of the full collision, if false a rect with the size 1x1 is returned
+	// the last parameter defines if all pixels should be checked, in this case it returns a
+	// rect with the size of the full collision, if false a rect with the size 1x1 is returned
 
-***
+===
 
 http://www.indiegamr.com
 
