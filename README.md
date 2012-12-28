@@ -16,8 +16,7 @@ To check for a collision between to Bitmaps and/or BitmapAnimations
   // the last parameter defines if all pixels should be checked, in this case it returns a
   // rect with the size of the full collision, if false a rect with the size 1x1 is returned
 
-
-* * *
+***
 
 http://www.indiegamr.com
 
