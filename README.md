@@ -16,6 +16,13 @@ To check for a collision between to Bitmaps and/or BitmapAnimations
 	// the last parameter defines if all pixels should be checked, in this case it returns a
 	// rect with the size of the full collision, if false a rect with the size 1x1 is returned
 
+## Debugging
+
+To see the intersecting parts and to verify if they are correct, use one of the follwing to add them as an output to the body of your html-file
+	ndgmr.DEBUG_COLLISION = true;
+	// OR
+	ndgmr.DEBUG = true;
+
 - - -
 
 http://www.indiegamr.com
