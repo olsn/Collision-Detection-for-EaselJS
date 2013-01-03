@@ -60,6 +60,7 @@ function imagesLoaded(e) {
      star.velY = Math.random()*1.5+1;
      star.rotVel = Math.random()*4-2;
      star.scaleX = star.scaleY = Math.random()*.5+.5;
+     star.rotation = Math.random() * 360;
      stage.addChild(star);
      stars.push(star);
   }

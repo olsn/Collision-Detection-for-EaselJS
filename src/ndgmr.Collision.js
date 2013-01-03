@@ -52,8 +52,11 @@ this.ndgmr = this.ndgmr || {};
 
   var checkPixelCollision = function(bitmap1, bitmap2, alphaThreshold, getRect) {
     //display the intersecting canvases for debugging
-    //document.body.appendChild(collisionCanvas);
-    //document.body.appendChild(collisionCanvas2);
+    if ( ndgmr.DEBUG || ndgmr.DEBUG_COLLISION ) { 
+      document.body.appendChild(collisionCanvas);
+      document.body.appendChild(collisionCanvas2);
+    }
+    
     getRect = getRect || false;
 
     var areObjectsCloseEnough,
@@ -131,8 +134,8 @@ this.ndgmr = this.ndgmr || {};
     bl = bitmap.globalToLocal(intersetion.x,intersetion.y);
     ctx.restore();
     ctx.clearRect(0,0,intersetion.width,intersetion.height);
-    ctx.rotate((bitmap.rotation)*(Math.PI/180));
-    ctx.scale(bitmap.scaleX,bitmap.scaleY);
+    ctx.rotate(_getParentalCumulatedProperty(bitmap,'rotation')*(Math.PI/180));
+    ctx.scale(_getParentalCumulatedProperty(bitmap,'scaleX','*'),_getParentalCumulatedProperty(bitmap,'scaleY','*'));
     ctx.translate(-bl.x,-bl.y);
     ctx.drawImage(image,0,0,image.width,image.height);
     return ctx.getImageData(0, 0, intersetion.width, intersetion.height).data;
@@ -170,6 +173,24 @@ this.ndgmr = this.ndgmr || {};
     }
 
     return null;
+  }
+
+  // this is needed to paint the intersection part correctly,
+  // if the tested bitmap is a child to a rotated/scaled parent
+  // this was not painted correctly before
+  var _getParentalCumulatedProperty = function(child,propName,operation) {
+    operation = operation || '+';
+    if ( child.parent && child.parent[propName] ) {
+      var cp = child[propName];
+      var pp = _getParentalCumulatedProperty(child.parent,propName,operation);
+      if ( operation == '*' ) {
+        return cp * pp;
+      } else {
+        return cp + pp;
+      }
+    }
+
+    return child[propName];
   }
 
   var calculateIntersection = function(rect1, rect2)
