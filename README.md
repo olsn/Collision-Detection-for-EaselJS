@@ -17,8 +17,7 @@ To check for a collision between to Bitmaps and/or BitmapAnimations
 	// rect with the size of the full collision, if false a rect with the size 1x1 is returned
 
 ## Debugging
-
-To see the intersecting parts and to verify if they are correct, use one of the follwing to add them as an output to the body of your html-file
+	// To add debug-output on page use:
 	ndgmr.DEBUG_COLLISION = true;
 	// OR
 	ndgmr.DEBUG = true;
