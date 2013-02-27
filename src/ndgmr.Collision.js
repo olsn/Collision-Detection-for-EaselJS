@@ -96,6 +96,8 @@ this.ndgmr = this.ndgmr || {};
       pixelIntersection.x2 += intersetion.x;
       pixelIntersection.y  += intersetion.y;
       pixelIntersection.y2 += intersetion.y;
+    } else {
+      return false;
     }
 
     return pixelIntersection;
