@@ -232,9 +232,11 @@ this.ndgmr = this.ndgmr || {};
         cbounds = getBounds(children[c]);
         if ( cbounds.x < bounds.x ) bounds.x = cbounds.x;
         if ( cbounds.y < bounds.y ) bounds.y = cbounds.y;
-        if ( cbounds.width > bounds.width ) bounds.width = cbounds.width;
-        if ( cbounds.height > bounds.height ) bounds.height = cbounds.height;
+        if ( cbounds.x - bounds.x + cbounds.width  > bounds.width  ) bounds.width  = cbounds.x - bounds.x + cbounds.width;
+        if ( cbounds.y - bounds.y + cbounds.height > bounds.height ) bounds.height = cbounds.y - bounds.y + cbounds.height;
       }
+      if ( bounds.x == Infinity ) bounds.x = 0;
+      if ( bounds.y == Infinity ) bounds.y = 0;
     } else {
       var gp,gp2,gp3,gp4,imgr;
       if ( obj instanceof createjs.Bitmap ) {
@@ -246,29 +248,31 @@ this.ndgmr = this.ndgmr || {};
           imgr.regX = cframe.regX;
           imgr.regY = cframe.regY;
         } else {
-          return bounds;
+          imgr = {};
+          bounds.x = obj.x || 0;
+          bounds.y = obj.y || 0;
         }
       } else {
-        return bounds;
+        imgr = {};
+        bounds.x = obj.x || 0;
+        bounds.y = obj.y || 0;
       }
 
-      imgr.regX = imgr.regX || 0;
-      imgr.regY = imgr.regY || 0;
+      imgr.regX = imgr.regX || 0; imgr.width  = imgr.width  || 0;
+      imgr.regY = imgr.regY || 0; imgr.height = imgr.height || 0;
       bounds.regX = imgr.regX;
       bounds.regY = imgr.regY;
       
-      gp = obj.localToGlobal( 0         -imgr.regX,0          -imgr.regY);
+      gp  = obj.localToGlobal(0         -imgr.regX,0          -imgr.regY);
       gp2 = obj.localToGlobal(imgr.width-imgr.regX,imgr.height-imgr.regY);
       gp3 = obj.localToGlobal(imgr.width-imgr.regX,0          -imgr.regY);
       gp4 = obj.localToGlobal(0         -imgr.regX,imgr.height-imgr.regY);
-
 
       bounds.x = Math.min(Math.min(Math.min(gp.x,gp2.x),gp3.x),gp4.x);
       bounds.y = Math.min(Math.min(Math.min(gp.y,gp2.y),gp3.y),gp4.y);
       bounds.width = Math.max(Math.max(Math.max(gp.x,gp2.x),gp3.x),gp4.x) - bounds.x;
       bounds.height = Math.max(Math.max(Math.max(gp.y,gp2.y),gp3.y),gp4.y) - bounds.y;
     }
-
     return bounds;
   }
   ndgmr.getBounds = getBounds;
