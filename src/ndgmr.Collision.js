@@ -105,7 +105,10 @@ this.ndgmr = this.ndgmr || {};
   ndgmr.checkPixelCollision = checkPixelCollision;
 
   var _collisionDistancePrecheck = function(bitmap1,bitmap2) {
-    var ir1,ir2;
+    var ir1,ir2,b1,b2;
+
+    b1 = bitmap1.localToGlobal(0,0);
+    b2 = bitmap2.localToGlobal(0,0);
 
     ir1 = bitmap1 instanceof createjs.Bitmap
          ? {width:bitmap1.image.width, height:bitmap1.image.height}
@@ -115,8 +118,8 @@ this.ndgmr = this.ndgmr || {};
          : bitmap2.spriteSheet.getFrame(bitmap2.currentFrame).rect;
     
     //precheck if objects are even close enough
-    return ( Math.abs(bitmap2.x-bitmap1.x) < ir2.width *bitmap2.scaleX+ir1.width *bitmap1.scaleX
-          && Math.abs(bitmap2.y-bitmap1.y) < ir2.height*bitmap2.scaleY+ir1.height*bitmap2.scaleY )
+    return ( Math.abs(b2.x-b1.x) < ir2.width *bitmap2.scaleX+ir1.width *bitmap1.scaleX
+          && Math.abs(b2.y-b1.y) < ir2.height*bitmap2.scaleY+ir1.height*bitmap2.scaleY )
   }
 
   var _intersectingImagePart = function(intersetion,bitmap,ctx,i) {
@@ -227,16 +230,27 @@ this.ndgmr = this.ndgmr || {};
   var getBounds = function(obj) {
     var bounds={x:Infinity,y:Infinity,width:0,height:0};
     if ( obj instanceof createjs.Container ) {
+      bounds.x2 = -Infinity;
+      bounds.y2 = -Infinity;
       var children = obj.children, l=children.length, cbounds, c;
       for ( c = 0; c < l; c++ ) {
         cbounds = getBounds(children[c]);
         if ( cbounds.x < bounds.x ) bounds.x = cbounds.x;
         if ( cbounds.y < bounds.y ) bounds.y = cbounds.y;
-        if ( cbounds.x - bounds.x + cbounds.width  > bounds.width  ) bounds.width  = cbounds.x - bounds.x + cbounds.width;
-        if ( cbounds.y - bounds.y + cbounds.height > bounds.height ) bounds.height = cbounds.y - bounds.y + cbounds.height;
+        if ( cbounds.x + cbounds.width > bounds.x2 ) bounds.x2 = cbounds.x + cbounds.width;
+        if ( cbounds.y + cbounds.height > bounds.y2 ) bounds.y2 = cbounds.y + cbounds.height;
+        //if ( cbounds.x - bounds.x + cbounds.width  > bounds.width  ) bounds.width  = cbounds.x - bounds.x + cbounds.width;
+        //if ( cbounds.y - bounds.y + cbounds.height > bounds.height ) bounds.height = cbounds.y - bounds.y + cbounds.height;
       }
       if ( bounds.x == Infinity ) bounds.x = 0;
       if ( bounds.y == Infinity ) bounds.y = 0;
+      if ( bounds.x2 == Infinity ) bounds.x2 = 0;
+      if ( bounds.y2 == Infinity ) bounds.y2 = 0;
+      
+      bounds.width = bounds.x2 - bounds.x;
+      bounds.height = bounds.y2 - bounds.y;
+      delete bounds.x2;
+      delete bounds.y2;
     } else {
       var gp,gp2,gp3,gp4,imgr;
       if ( obj instanceof createjs.Bitmap ) {
