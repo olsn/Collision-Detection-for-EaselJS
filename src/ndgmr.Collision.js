@@ -34,6 +34,7 @@ this.ndgmr = this.ndgmr || {};
 
   var collisionCanvas = document.createElement('canvas');
   var collisionCtx = collisionCanvas.getContext('2d');
+      //collisionCtx.globalCompositeOperation = 'source-in';
       collisionCtx.save();
 
   var collisionCanvas2 = document.createElement('canvas');
@@ -69,8 +70,8 @@ this.ndgmr = this.ndgmr || {};
       return false;
     }
 
-    intersetion = checkRectCollision(bitmap1,bitmap2);
-    if ( !intersetion ) {
+    intersection = checkRectCollision(bitmap1,bitmap2);
+    if ( !intersection ) {
       return false;
     }
 
@@ -78,24 +79,23 @@ this.ndgmr = this.ndgmr || {};
     alphaThreshold = Math.min(0.99999,alphaThreshold);
 
     //setting the canvas size
-    collisionCanvas.width  = intersetion.width;
-    collisionCanvas.height = intersetion.height; 
-    collisionCanvas2.width  = intersetion.width;
-    collisionCanvas2.height = intersetion.height; 
+    collisionCanvas.width  = intersection.width;
+    collisionCanvas.height = intersection.height; 
+    collisionCanvas2.width  = intersection.width;
+    collisionCanvas2.height = intersection.height; 
 
-    //getting the intersecting image-parts from the bitmaps
-    imageData1 = _intersectingImagePart(intersetion,bitmap1,collisionCtx,1);
-    imageData2 = _intersectingImagePart(intersetion,bitmap2,collisionCtx2,2);
+    imageData1 = _intersectingImagePart(intersection,bitmap1,collisionCtx,1);
+    imageData2 = _intersectingImagePart(intersection,bitmap2,collisionCtx2,2);
 
     //compare the alpha values to the threshold and return the result
     // = true if pixels are both > alphaThreshold at one coordinate
-    pixelIntersection = _compareAlphaValues(imageData1,imageData2,intersetion.width,intersetion.height,alphaThreshold, getRect);
+    pixelIntersection = _compareAlphaValues(imageData1,imageData2,intersection.width,intersection.height,alphaThreshold, getRect);
     
     if ( pixelIntersection ) {
-      pixelIntersection.x  += intersetion.x;
-      pixelIntersection.x2 += intersetion.x;
-      pixelIntersection.y  += intersetion.y;
-      pixelIntersection.y2 += intersetion.y;
+      pixelIntersection.x  += intersection.x;
+      pixelIntersection.x2 += intersection.x;
+      pixelIntersection.y  += intersection.y;
+      pixelIntersection.y2 += intersection.y;
     } else {
       return false;
     }
@@ -123,7 +123,7 @@ this.ndgmr = this.ndgmr || {};
   }
 
   var _intersectingImagePart = function(intersetion,bitmap,ctx,i) {
-    var bl, image, frameName;
+    var bl, image, frameName, sr;
 
     if ( bitmap instanceof createjs.Bitmap ) {
       image = bitmap.image;
@@ -138,11 +138,16 @@ this.ndgmr = this.ndgmr || {};
 
     bl = bitmap.globalToLocal(intersetion.x,intersetion.y);
     ctx.restore();
-    ctx.clearRect(0,0,intersetion.width,intersetion.height);
+    ctx.save();
+    //ctx.clearRect(0,0,intersetion.width,intersetion.height);
     ctx.rotate(_getParentalCumulatedProperty(bitmap,'rotation')*(Math.PI/180));
     ctx.scale(_getParentalCumulatedProperty(bitmap,'scaleX','*'),_getParentalCumulatedProperty(bitmap,'scaleY','*'));
     ctx.translate(-bl.x-intersetion['rect'+i].regX,-bl.y-intersetion['rect'+i].regY);
-    ctx.drawImage(image,0,0,image.width,image.height);
+    if ( (sr = bitmap.sourceRect) != undefined ) {
+      ctx.drawImage(image,sr.x,sr.y,sr.width,sr.height,0,0,sr.width,sr.height);
+    } else {
+      ctx.drawImage(image,0,0,image.width,image.height);
+    }
     return ctx.getImageData(0, 0, intersetion.width, intersetion.height).data;
   }
 
@@ -252,22 +257,24 @@ this.ndgmr = this.ndgmr || {};
       delete bounds.x2;
       delete bounds.y2;
     } else {
-      var gp,gp2,gp3,gp4,imgr;
+      var gp,gp2,gp3,gp4,imgr={},sr;
       if ( obj instanceof createjs.Bitmap ) {
-        imgr = obj.image;
+        sr = obj.sourceRect || obj.image;
+
+        imgr.width = sr.width;
+        imgr.height = sr.height;
       } else if ( obj instanceof createjs.BitmapAnimation ) {
         if ( obj.spriteSheet._frames && obj.spriteSheet._frames[obj.currentFrame] && obj.spriteSheet._frames[obj.currentFrame].image ) {
           var cframe = obj.spriteSheet.getFrame(obj.currentFrame);
-          imgr =  cframe.rect;
+          imgr.width =  cframe.rect.width;
+          imgr.height =  cframe.rect.height;
           imgr.regX = cframe.regX;
           imgr.regY = cframe.regY;
         } else {
-          imgr = {};
           bounds.x = obj.x || 0;
           bounds.y = obj.y || 0;
         }
       } else {
-        imgr = {};
         bounds.x = obj.x || 0;
         bounds.y = obj.y || 0;
       }

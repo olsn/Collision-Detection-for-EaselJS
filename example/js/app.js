@@ -52,6 +52,11 @@ function imagesLoaded(e) {
         if( Math.random() < 0.5 ) star.advance();
      } else {
         star = new createjs.Bitmap(af[STAR]);
+        if ( Math.random() < 1 ) {
+          star.sourceRect = new createjs.Rectangle(0,0,star.image.width/2,star.image.height/2);
+        } else if ( Math.random() < 0.5 ) {
+          star.sourceRect = new createjs.Rectangle(0,0,star.image.width/2,star.image.height);
+        }
      }
      star.x = Math.random()*canvas.width;
      star.y = Math.random()*canvas.height;
