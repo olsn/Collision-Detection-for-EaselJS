@@ -127,7 +127,7 @@ this.ndgmr = this.ndgmr || {};
 
     if ( bitmap instanceof createjs.Bitmap ) {
       image = bitmap.image;
-    } else if ( bitmap instanceof createjs.BitmapAnimation ) {
+    } else if ( bitmap instanceof createjs.Sprite ) {
     frame = bitmap.spriteSheet.getFrame( bitmap.currentFrame )
       frameName = frame.image.src + ':' + 
                   frame.rect.x + ':' + frame.rect.y + ':' + 
@@ -266,7 +266,7 @@ this.ndgmr = this.ndgmr || {};
 
         imgr.width = sr.width;
         imgr.height = sr.height;
-      } else if ( obj instanceof createjs.BitmapAnimation ) {
+      } else if ( obj instanceof createjs.Sprite ) {
         if ( obj.spriteSheet._frames && obj.spriteSheet._frames[obj.currentFrame] && obj.spriteSheet._frames[obj.currentFrame].image ) {
           var cframe = obj.spriteSheet.getFrame(obj.currentFrame);
           imgr.width =  cframe.rect.width;
