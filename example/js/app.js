@@ -46,15 +46,15 @@ function imagesLoaded(e) {
   var ss = new createjs.SpriteSheet({images:[af[STARS]],frames: {width:30, height:22, count:4, regX: 0, regY:0}, animations:{blink:[0,3]}});
   for ( var c = 0; c < 100; c++ ) {
      if ( Math.random() < 0.2 ) {
-        var star = new createjs.BitmapAnimation(ss);
-        star.spriteSheet.getAnimation('blink').frequency = (Math.random()*3+3)|0;
+        var star = new createjs.Sprite(ss);
+        star.spriteSheet.getAnimation('blink').speed = 1/((Math.random()*3+3)|0);
         star.gotoAndPlay('blink');
         if( Math.random() < 0.5 ) star.advance();
      } else {
         star = new createjs.Bitmap(af[STAR]);
-        if ( Math.random() < 1 ) {
+        if ( Math.random() < 0.66 ) {
           star.sourceRect = new createjs.Rectangle(0,0,star.image.width/2,star.image.height/2);
-        } else if ( Math.random() < 0.5 ) {
+        } else if ( Math.random() < 0.33 ) {
           star.sourceRect = new createjs.Rectangle(0,0,star.image.width/2,star.image.height);
         }
      }
@@ -78,11 +78,11 @@ function imagesLoaded(e) {
 
   // set the Ticker to 30fps 
   createjs.Ticker.setFPS(30); 
-  createjs.Ticker.addListener(tick); 
+  createjs.Ticker.addEventListener('tick', this.onTick.bind(this)); 
 }
  
 // update the stage every frame 
-function tick(e) {
+function onTick(e) {
    stats.begin();
    for ( var c = 0; c < stars.length; c++ ) {
       var star = stars[c];

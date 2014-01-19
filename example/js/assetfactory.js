@@ -19,10 +19,7 @@
     var image = new Image();
     this[url] = image;
     this.assetsToLoad++;
-    var self = this;
-    image.onload = function(e) {
-      self.onImageLoaded(e);
-    };
+    image.onload = this.onImageLoaded.bind(this);
 
     image.src = url;
   }
