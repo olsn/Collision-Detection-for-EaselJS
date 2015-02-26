@@ -65,10 +65,12 @@ this.ndgmr = this.ndgmr || {};
         imageData1, imageData2,
         pixelIntersection;
 
-    areObjectsCloseEnough = _collisionDistancePrecheck(bitmap1,bitmap2);
-    if ( !areObjectsCloseEnough ) {
-      return false;
-    }
+    //this is currently not working correctly if one of the objects is rotated
+    //calculating a bounding-box as precheck won't enhance performance here.
+    //areObjectsCloseEnough = _collisionDistancePrecheck(bitmap1,bitmap2);
+    //if ( !areObjectsCloseEnough ) {
+    //  return false;
+    //}
 
     intersection = checkRectCollision(bitmap1,bitmap2);
     if ( !intersection ) {
@@ -104,6 +106,7 @@ this.ndgmr = this.ndgmr || {};
   }
   ndgmr.checkPixelCollision = checkPixelCollision;
 
+  //this is currently not working correctly if one of the objects is rotated
   var _collisionDistancePrecheck = function(bitmap1,bitmap2) {
     var ir1,ir2,b1,b2;
 
