@@ -147,9 +147,8 @@ this.ndgmr = this.ndgmr || {};
       } else if (bitmap.instance != undefined) {		  
         mBitmap = bitmap.instance; 
       }
-        
-	    frame = mBitmap.spriteSheet.getFrame( mBitmap.currentFrame )
-	        frameName = frame.image.src + ':' + 
+      frame = mBitmap.spriteSheet.getFrame( mBitmap.currentFrame )
+      frameName = frame.image.src + ':' + 
                   frame.rect.x + ':' + frame.rect.y + ':' + 
                   frame.rect.width  + ':' + frame.rect.height;// + ':' + frame.rect.regX  + ':' + frame.rect.regY 
       if ( cachedBAFrames[frameName] ) {
