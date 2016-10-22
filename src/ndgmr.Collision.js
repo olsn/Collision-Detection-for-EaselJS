@@ -140,6 +140,22 @@ this.ndgmr = this.ndgmr || {};
       } else {
         cachedBAFrames[frameName] = image = createjs.SpriteSheetUtils.extractFrame(bitmap.spriteSheet,bitmap.currentFrame);
       }
+    } else if ( bitmap instanceof createjs.MovieClip ) {
+      var mBitmap;
+      if(bitmap.instance.instance != undefined) {
+        mBitmap = bitmap.instance.instance; 
+      } else if (bitmap.instance != undefined) {		  
+        mBitmap = bitmap.instance; 
+      }
+      frame = mBitmap.spriteSheet.getFrame( mBitmap.currentFrame )
+      frameName = frame.image.src + ':' + 
+                  frame.rect.x + ':' + frame.rect.y + ':' + 
+                  frame.rect.width  + ':' + frame.rect.height;// + ':' + frame.rect.regX  + ':' + frame.rect.regY 
+      if ( cachedBAFrames[frameName] ) {
+        image = cachedBAFrames[frameName];
+      } else {
+        cachedBAFrames[frameName] = image = createjs.SpriteSheetUtils.extractFrame(mBitmap.spriteSheet,mBitmap.currentFrame);
+      }
     }
 
     bl = bitmap.globalToLocal(intersetion.x,intersetion.y);
