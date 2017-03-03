@@ -22,7 +22,7 @@ To check for a collision between to Bitmaps and/or BitmapAnimations
 	// OR
 	ndgmr.DEBUG = true;
 
-Note: debugging only applies to pixel perfect collision detection (when using `checkRectCollision()`);
+Note: debugging only applies to pixel perfect collision detection (when using `checkPixelCollision()`);
 
 - - -
 
